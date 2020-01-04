@@ -1,7 +1,10 @@
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const path = require('path')
 const webpack = require('webpack')
 const argv = require('../../server/argv')
+
+const isProd = process.env.NODE_ENV === 'production'
 
 const COMMON_PLUGINS = [
     new webpack.EnvironmentPlugin({
@@ -16,6 +19,8 @@ if (argv.analyzer) {
         })
     )
 }
+
+const styleLoader = isProd ? MiniCssExtractPlugin.loader : 'style-loader'
 
 module.exports = (webpackOptions) => ({
     mode: webpackOptions.mode,
@@ -47,7 +52,7 @@ module.exports = (webpackOptions) => ({
                 test: /\.css$/,
                 exclude: /(node_module|\.module.css$)/,
                 use: [
-                    'style-loader', 
+                    styleLoader, 
                     'css-loader',
                     'postcss-loader'
                 ]
@@ -56,7 +61,7 @@ module.exports = (webpackOptions) => ({
                 test: /\.module\.css$/,
                 exclude: /node_module/,
                 use: [
-                    'style-loader', 
+                    styleLoader, 
                     {
                         loader: 'css-loader',
                         options: {
@@ -71,7 +76,7 @@ module.exports = (webpackOptions) => ({
                 test: /.less$/,
                 exclude: /node_modules/,
                 use: [ // Loaders are evaluated/executed from right to left (or from bottom to top)
-                    'style-loader', 
+                    styleLoader, 
                     'css-loader',
                     'postcss-loader',
                     'less-loader'
@@ -80,7 +85,7 @@ module.exports = (webpackOptions) => ({
             {
                 test: /.css$/,
                 include: /node_module/,
-                use: ['style-loader', 'css-loader', 'postcss-loader']
+                use: [styleLoader, 'css-loader', 'postcss-loader']
             },
             {
                 test: /\.(eot|otf|ttf|woff|woff2)$/,

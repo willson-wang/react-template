@@ -44,7 +44,7 @@ module.exports = webpackConfig({
           cacheGroups: {
             styles: {
                 name: 'styles',
-                test: /\.css$/,
+                test: /\.(css|less)$/,
                 chunks: 'all',
                 enforce: true,
             },
