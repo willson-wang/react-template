@@ -5,6 +5,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { hot } from 'react-hot-loader/root'
 import { setConfig } from 'react-hot-loader';
 import routes from './router'
+import './assets/index.less'
 
 const RouterComponent = () => renderRoutes(routes)
 

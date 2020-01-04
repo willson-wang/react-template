@@ -1,9 +1,10 @@
 import React from 'react'
+import styles from './index.module.css'
 
-function Customer () {
+function Home () {
     return (
-        <div>home</div>
+        <div className={styles.wrap}>home</div>
     )
 }
 
-export default Customer
+export default Home

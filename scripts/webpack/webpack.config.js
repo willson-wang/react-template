@@ -44,14 +44,43 @@ module.exports = (webpackOptions) => ({
                 use: 'babel-loader'
             },
             {
-                test: /.css$/,
+                test: /\.css$/,
+                exclude: /(node_module|\.module.css$)/,
+                use: [
+                    'style-loader', 
+                    'css-loader',
+                    'postcss-loader'
+                ]
+            },
+            {
+                test: /\.module\.css$/,
                 exclude: /node_module/,
-                use: ['style-loader', 'css-loader']
+                use: [
+                    'style-loader', 
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            modules: true, 
+                            importLoaders: 1
+                        }
+                    }, 
+                    'postcss-loader'
+                ]
+            },
+            {
+                test: /.less$/,
+                exclude: /node_modules/,
+                use: [ // Loaders are evaluated/executed from right to left (or from bottom to top)
+                    'style-loader', 
+                    'css-loader',
+                    'postcss-loader',
+                    'less-loader'
+                ]
             },
             {
                 test: /.css$/,
                 include: /node_module/,
-                use: ['style-loader', 'css-loader']
+                use: ['style-loader', 'css-loader', 'postcss-loader']
             },
             {
                 test: /\.(eot|otf|ttf|woff|woff2)$/,
