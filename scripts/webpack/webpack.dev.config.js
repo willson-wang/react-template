@@ -6,14 +6,11 @@ const CircularDependencyPlugin = require('circular-dependency-plugin')
 console.log('__dir', __dirname)
 module.exports = webpackConfig({
     mode: 'development',
-    entry: [
-        'webpack-hot-middleware/client?name=mobile',
-        path.join(__dirname, '../../src/app.tsx')
-    ],
+    entry: ['webpack-hot-middleware/client?name=mobile', path.join(__dirname, '../../src/app.tsx')],
     output: {
         filename: '[name].js',
         chunkFilename: '[name].chunk.js',
-        publicPath: '/',
+        publicPath: '/'
     },
     optimization: {
         splitChunks: {
@@ -28,10 +25,10 @@ module.exports = webpackConfig({
         }),
         new CircularDependencyPlugin({
             exclude: /a\.js|node_modules/, // exclude node_modules
-            failOnError: false, // show a warning when there is a circular dependency
-        }),
+            failOnError: false // show a warning when there is a circular dependency
+        })
     ],
-    devtool: 'eval-source-map',
+    devtool: 'none',
     performance: {
         hints: false
     }

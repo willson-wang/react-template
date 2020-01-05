@@ -1,15 +1,15 @@
-const express = require('express');
+const express = require('express')
 const path = require('path')
-const webpack = require('webpack');
-const webpackDevMiddleware = require('webpack-dev-middleware');
+const webpack = require('webpack')
+const webpackDevMiddleware = require('webpack-dev-middleware')
 const webpackHotMiddleware = require('webpack-hot-middleware')
 const httpProxy = require('http-proxy-middleware')
 
-const app = express();
-const config = require('../scripts/webpack/webpack.dev.config.js');
+const app = express()
+const config = require('../scripts/webpack/webpack.dev.config.js')
 const runOpen = require('./runOpen')
 const port = require('./port')
-const compiler = webpack(config);
+const compiler = webpack(config)
 const proxyConfig = require('./proxy')
 
 // Tell express to use the webpack-dev-middleware and use the webpack.config.js
@@ -21,13 +21,13 @@ const middleware = webpackDevMiddleware(compiler, {
     stats: {
         modules: false,
         children: false,
-        chunks: true,
+        chunks: false,
         chunkModules: false,
         colors: true
     }
-  })
+})
 
-app.use(middleware);
+app.use(middleware)
 
 app.use(webpackHotMiddleware(compiler))
 
@@ -55,13 +55,13 @@ app.get('*.js', (req, res, next) => {
 })
 
 // Serve the files on port 3000.
-app.listen(port, function (err) {
-  if (err) {
-    throw err
-  }
-  runOpen(`http://localhost:${port}`, {
-    openPage: '/',
-    open: ['google chrome', '--incognito']
-  })
-  console.log(`Example app listening on port ${port}!\n`);
-});
+app.listen(port, function(err) {
+    if (err) {
+        throw err
+    }
+    runOpen(`http://localhost:${port}`, {
+        openPage: '/',
+        open: ['google chrome', '--incognito']
+    })
+    console.log(`Example app listening on port ${port}!\n`)
+})

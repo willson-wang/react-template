@@ -42,6 +42,8 @@ new webpack.HotModuleReplacementPlugin()
 
 使用react-hot-loader进行热更新
 
+https://github.com/gaearon/react-hot-loader/issues/1227
+
 
 3. 统一browserlist设置，建立.browserslistrc
 
