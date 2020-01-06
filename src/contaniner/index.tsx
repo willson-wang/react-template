@@ -1,27 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react'
 import axios from 'axios'
-import { useHistory } from 'react-router-dom'
-import { renderRoutes } from "react-router-config";
+import { renderRoutes } from 'react-router-config'
 import Footer from '../components/footer'
 
-console.log('aaaa 0000')
-const debounce = function debounce(fn, time) {
-    let timer;
-    return function inner(...args) {
-      console.log('timer', timer)
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        console.log('xxxx')
-        fn(...args);
-      }, time);
-    };
-};
+interface IRoutes {
+    path?: string
+    component?: React.ComponentType
+    routes?: []
+}
 
-function Index (props) {
-    const [count, setCount] = useState(0);
-    const history = useHistory()
-    const newCount = debounce(setCount, 1000)
-    const getHouseList = async () => {
+interface IProps {
+    history: object
+    route: {
+        [key: string]: IRoutes[]
+    }
+}
+
+console.log('aaaa 0000')
+
+function Index(props: IProps): JSX.Element {
+    const getHouseList = async (): Promise<object> => {
         const data = await axios.get('/api/broker/index/get-building-list', {
             params: {
                 pageIndex: 1,
@@ -31,22 +29,29 @@ function Index (props) {
                 from: 'b2c_h5',
                 orgCode: 'hzzhongxadmin',
                 tenant_code: 'hzzhongxadmin',
-                token: 'cdkqqf1407307954',
+                token: 'cdkqqf1407307954'
             }
         })
         console.log('data', data)
+        return data
     }
-    console.log('props',  props)
+    console.log('props', props)
     useEffect(() => {
         console.log('getList')
         getHouseList()
+            .then(() => {
+                console.log('true')
+            })
+            .catch((err) => {
+                console.log('err', err)
+            })
     }, [])
     return (
         <div>
-            {renderRoutes(props.route.routes, { someProp: "these extra props are optional" })}
+            {renderRoutes(props.route.routes, { someProp: 'these extra props are optional' })}
             <Footer />
         </div>
-    );
+    )
 }
 
 // const Index = () => (

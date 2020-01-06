@@ -1,2 +1,2 @@
-export Footer from './footer'
-export Loading from './loading'
+export { default as Footer } from './footer'
+export { default as Loading } from './loading'

@@ -1,5 +1,11 @@
 {
     "compilerOptions": {
+        "baseUrl": "./",
+        "paths": {
+            "@/*": ["src/*"],
+            "@utils/*": ["src/utils/*"],
+            "@components/*": ["src/components/*"]
+        },
         "outDir": "./dist/",
         "sourceMap": true,
         "noImplicitAny": true,
@@ -13,12 +19,14 @@
             "dom.iterable",
             "esnext"
         ],
+        "allowJs": true
     },
     "include": [
         "src"
     ],
     "exclude": [
         "node_modules",
-        "**/*.spec.ts"
+        "**/*.spec.ts",
+        "scripts"
     ]
 }

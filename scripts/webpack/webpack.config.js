@@ -189,7 +189,7 @@ module.exports = (webpackOptions) => ({
         mainFields: ['main', 'jsnext:main'],
         alias: {
             'react-dom': '@hot-loader/react-dom',
-            '@src': resolve('src'),
+            '@': resolve('src'),
             '@components': resolve('src/components'),
             '@utils': resolve('src/utils')
         }

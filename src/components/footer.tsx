@@ -1,9 +1,9 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
 
-function Footer () {
+function Footer(): JSX.Element {
     const history = useHistory()
-    const goTo = function (routeName) {
+    const goTo = function(routeName: string): void {
         history.push({
             pathname: routeName
         })
