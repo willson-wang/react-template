@@ -20,17 +20,22 @@ const COMMON_PLUGINS = [
         modules: true,
         modulesCount: 100,
         profile: true
-    }),
-    new AutoDllPlugin({
-        inject: true, // will inject the DLL bundle to index.html
-        debug: false,
-        filename: '[name].js',
-        path: './dll',
-        entry: {
-            vendor: ['react', 'react-hot-loader', '@hot-loader/react-dom']
-        }
     })
 ]
+
+if (isProd) {
+    COMMON_PLUGINS.push(
+        new AutoDllPlugin({
+            inject: true, // will inject the DLL bundle to index.html
+            debug: false,
+            filename: '[name].js',
+            path: './dll',
+            entry: {
+                vendor: ['react', 'react-hot-loader', '@hot-loader/react-dom']
+            }
+        })
+    )
+}
 
 if (argv.analyzer) {
     COMMON_PLUGINS.push(

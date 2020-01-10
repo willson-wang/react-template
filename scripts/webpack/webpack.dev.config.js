@@ -28,7 +28,7 @@ module.exports = webpackConfig({
             failOnError: false // show a warning when there is a circular dependency
         })
     ],
-    devtool: 'none',
+    devtool: 'source-map',
     performance: {
         hints: false
     }

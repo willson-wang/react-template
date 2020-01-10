@@ -7,3 +7,8 @@
     flex-direction: column;
     align-items: center;
 }
+
+.wrap div {
+    width: 100%;
+    text-align: center;
+}

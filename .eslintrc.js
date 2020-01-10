@@ -27,6 +27,13 @@ module.exports = {
         '@typescript-eslint/no-var-requires': 0,
         '@typescript-eslint/indent': ['error', 4],
         '@typescript-eslint/quotes': ['error', 'single'],
+        '@typescript-eslint/strict-boolean-expressions': [
+            'warn',
+            {
+                allowNullable: false,
+                ignoreRhs: true
+            }
+        ],
         'react-hooks/rules-of-hooks': 'error', // Checks rules of Hooks
         'react-hooks/exhaustive-deps': 'warn', // Checks effect dependencies
         'space-before-function-paren': [
@@ -36,6 +43,7 @@ module.exports = {
                 named: 'never',
                 asyncArrow: 'always'
             }
-        ]
+        ],
+        'generator-star-spacing': ['error', { before: false, after: true }]
     }
 }

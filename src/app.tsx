@@ -1,25 +1,23 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { renderRoutes } from 'react-router-config'
 import { BrowserRouter } from 'react-router-dom'
-import { hot } from 'react-hot-loader/root'
-import { setConfig } from 'react-hot-loader'
-import routes from './router'
+import { Provider } from 'react-redux'
+import Root from './root'
+import configureStore from './utils/configureStore'
 import './assets/index.less'
 
-const RouterComponent = (): JSX.Element => renderRoutes(routes)
-
-setConfig({ logLevel: 'debug' })
-const Root = hot(RouterComponent)
-
-console.log('ReactDOM', routes)
+console.log('ReactDOM 000')
 
 const MOUNT_NODE = document.getElementById('app')
 
+const store = configureStore({})
+
 ReactDOM.render(
-    <BrowserRouter>
-        <Root />
-    </BrowserRouter>,
+    <Provider store={store}>
+        <BrowserRouter>
+            <Root />
+        </BrowserRouter>
+    </Provider>,
     MOUNT_NODE
 )
 
