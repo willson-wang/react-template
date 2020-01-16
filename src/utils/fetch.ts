@@ -88,7 +88,11 @@ export const get = async <T>(url: string, config: CustomAxiosRequestConfig): Pro
 //     return instance.get<T>(url, config)
 // }
 
-export const post = async <T>(url: string, data: object, config: CustomAxiosRequestConfig): Promise<T> => {
+export const post = async <T>(
+    url: string,
+    data: object,
+    config: CustomAxiosRequestConfig
+): Promise<T> => {
     return instance.post(url, data, config)
 }
 
