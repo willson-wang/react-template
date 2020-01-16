@@ -13,7 +13,7 @@ export default function configureStore<T>(preloadState: object): IStore<T> {
     const middlewares = [sagaMiddleware]
     const middlewareEnhancer = applyMiddleware(...middlewares)
 
-    const store: IStore<T> = createStore(createReducer(), middlewareEnhancer)
+    const store: IStore<T> = createStore(createReducer(), preloadState, middlewareEnhancer)
     store.asyncReducers = {}
     store.asyncSagas = {}
     store.runSaga = sagaMiddleware.run

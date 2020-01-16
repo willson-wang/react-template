@@ -317,6 +317,41 @@ plugins: {
 
 代码分割，所以我们需要使用replaceReducer来动态注册store
 
+typescript + redux技巧
+```
+// 1. 使用type + typeof 来替换interface定义state的类型
+const initialState = {
+  name: '',
+  points: 0,
+  likesGames: true
+}
+
+type State = typeof initialState;
+
+// 2. 使用ReturnType来推导Action的类型
+export function updateName(name: string) {
+  return {
+    type: ‘UPDATE_NAME’,
+    name
+  }
+}
+
+type Action = ReturnType<typeof updateName> // {type: string, name: string} 无法推导出type的值
+
+使用类型推断
+
+export function updateName(name: string) {
+  return {
+    type: 'UPDATE_NAME',
+    name
+  } as const
+}
+
+type Action = ReturnType<typeof updateName> // {type: '‘UPDATE_NAME’', name: string} 无法推导出type的值
+
+https://gist.github.com/schettino/c8bf5062ef99993ce32514807ffae849
+```
+
 
 8. 引入immutable数据概念
 
@@ -341,5 +376,7 @@ https://immerjs.github.io/immer/docs/introduction
 
 
 https://stackoverflow.com/questions/35517245/error-missing-class-properties-transform
+https://medium.com/@jrwebdev/react-render-props-in-typescript-b561b00bc67c
+https://codeburst.io/dynamic-imports-react-and-redux-29f6d2d88d77
 
 
