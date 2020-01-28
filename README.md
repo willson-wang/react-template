@@ -1,10 +1,8 @@
-### react最佳实践，自己搭建react开发环境
+### React+Ts+Redux+Redux-Saga+Immutable，从0到1搭建环境
 
-1. 配置webpack、dev、prod分包配置
+#### 一、 配置webpack
 
-2. webpack开发环境热更新
-
-https://stackoverflow.com/questions/55263085/property-hot-does-not-exist-on-type-nodemodule-ts2339
+webpack开发环境热更新
 
 使用webpack-dev-middleware + webpack-hot-middleware开启热更新
 
@@ -42,29 +40,92 @@ new webpack.HotModuleReplacementPlugin()
 
 使用react-hot-loader进行热更新
 
-https://github.com/gaearon/react-hot-loader/issues/1227
-
-
-3. 统一browserlist设置，建立.browserslistrc
-
-last 3 major versions, > 0.1%  浏览器最新的三个主版本及浏览器份额大于0.1%，这个场景已经覆盖了Global coverage:96.2%
-
-如下图所示
-
-
-查看具体的浏览器份额https://browserl.ist/
-
 React-Hot-Loader: some components were updated out-of-bound. Updating your app to reconcile the changes. 
 
 提示上面这个警告是正常的，这是react-hot-loader为了保证异步加载的组件能够正常热更新，所以重新走了一次组件的流程
 
 可以通过setConfig({ trackTailUpdates:false })取消
 
-3. babel配置
+https://github.com/gaearon/react-hot-loader/issues/1227
+https://stackoverflow.com/questions/55263085/property-hot-does-not-exist-on-type-nodemodule-ts2339
 
+#### 二、 统一browserlist设置，建立.browserslistrc
 
+last 3 major versions, > 0.1%  浏览器最新的三个主版本及浏览器份额大于0.1%，这个场景已经覆盖了Global coverage:96.2%
 
-4. 配置typescript
+如下图所示
+
+查看具体的浏览器份额 https://browserl.ist/
+
+#### 三、 babel配置
+
+- 按需polyfill
+- 使用env预设来进行语法转化
+- 引入runtime包减少重复代码
+- 允许使用stage中的语法
+
+配置如下
+
+```
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {},
+        "modules": false,
+        "debug": false,
+        "include": [],
+        "exclude": [],
+        "useBuiltIns": "usage",
+        "corejs": {
+          "version": 3,
+          "proposals": true
+        },
+        "forceAllTransforms": false,
+        "shippedProposals": true
+      }
+    ],
+    "@babel/preset-typescript",
+    [
+      "@babel/preset-react",
+      {
+          // "pragma": "dom", // default pragma is React.createElement
+          // "pragmaFrag": "DomFrag", // default is React.Fragment
+          // "throwIfNamespace": false // defaults to true
+      }
+    ]
+  ],
+  "plugins": [ // Plugins run before Presets. ordering is first to last.Preset ordering is reversed (last to first).
+    ["@babel/plugin-proposal-decorators", {
+      "legacy": true
+    }],
+    "@babel/plugin-proposal-export-default-from",
+    "@babel/plugin-proposal-class-properties",
+    [
+      "import",
+      {
+        "libraryName": "antd",
+        "style": true   // or 'css'
+      }
+    ],
+    [
+      "@babel/plugin-transform-runtime",
+      {
+        "corejs": false,
+        "helpers": true,
+        "regenerator": true,
+        "useESModules": false
+      }
+    ],
+    [
+      "react-hot-loader/babel"
+    ]
+  ]
+}
+```
+
+#### 四、 配置typescript
 
 https://github.com/typescript-cheatsheets/react-typescript-cheatsheet#reacttypescript-cheatsheets
 
@@ -72,7 +133,7 @@ https://medium.com/@xfor/typescript-react-hocs-context-api-cb46da611f12
 
 https://github.com/TypeStrong/atom-typescript/issues/1053
 
-5. 引入eslint+prettier+husky+lint-stated用于打造统一的代码格式与输出，提高代码质量
+#### 五、 引入eslint+prettier+husky+lint-stated用于打造统一的代码格式与输出，提高代码质量
 
 开启eslint
 
@@ -200,15 +261,34 @@ https://github.com/prettier/eslint-config-prettier
 
 https://github.com/prettier/prettier/issues/4633
 
-6. 引入react-router
+#### 六、 引入react-router
 
 使用react-router-config配置静态路由,如下所示
 
+```
+const routes = [
+    {
+        component: Index,
+        routes: [
+            {
+                path: '/',
+                exact: true,
+                component: Home
+            },
+            HomeRoute,
+            MyRoute,
+            CustomerRoute,
+            LoginRoute,
+            {
+                path: '*',
+                component: Home
+            }
+        ]
+    }
+]
+```
 
-
-
-
-7. 使用css module + less来书写样式
+#### 七、 使用css module + less来书写样式
 
 ```
 {
@@ -254,8 +334,7 @@ module.exports = ({file, env}) => ({
 })
 ```
 
-postcss-import: 
-支持@import导入css
+postcss-import: 支持@import导入css
 
 postcss-preset-env: {}
 
@@ -275,7 +354,7 @@ cssnano: {}
 
 在线autoprefixer站点https://autoprefixer.github.io/
 
-8. 引入stylelint对css进行代码检查
+#### 八、 引入stylelint对css进行代码检查
 
 ```
 yarn add stylelint stylelint-config-standard --dev
@@ -310,7 +389,7 @@ plugins: {
 "css:fix": "stylelint src/**/*.css src/**/*.less --fix"
 ```
 
-7. 引入redux、react-redux进行状态管理
+#### 九、 引入redux、react-redux进行状态管理
 
 通过configureStore.js来创建store的目的是，大多数应用程序使用多个中间件，并且每个中间件通常需要进行一些初始设置。
 由于逻辑结构不够整洁，添加到index.js的额外噪声可能很快使其难以维护。
@@ -349,11 +428,10 @@ export function updateName(name: string) {
 
 type Action = ReturnType<typeof updateName> // {type: '‘UPDATE_NAME’', name: string} 无法推导出type的值
 
-https://gist.github.com/schettino/c8bf5062ef99993ce32514807ffae849
 ```
+https://gist.github.com/schettino/c8bf5062ef99993ce32514807ffae849
 
-
-8. 引入immutable数据概念
+#### 十、 引入immutable数据概念
 
 熟悉 React 的都知道，React 做性能优化时有一个避免重复渲染的大招，就是使用 `shouldComponentUpdate()`，但它默认返回 `true`，即始终会执行 `render()` 方法，然后做 Virtual DOM 比较，并得出是否需要做真实 DOM 更新，这里往往会带来很多无必要的渲染并成为性能瓶颈。
 
@@ -366,15 +444,126 @@ Immutable 则提供了简洁高效的判断数据是否变化的方法，只需 
 https://zhuanlan.zhihu.com/p/20295971
 https://immerjs.github.io/immer/docs/introduction
 
-9. 使用redux-saga进行异步请求
+#### 十一、 使用redux-saga进行异步请求管理
 
-10. 引入antd-mobile作为基础组件
+```
+import { call, all, takeLatest, put } from 'redux-saga/effects'
+import { SagaIterator } from 'redux-saga'
+import { get } from '@utils/fetch'
+import types, { House } from './constants'
 
-11. 使用jest做单元测试
+const houseListUrl = '/api/broker/index/get-building-list'
+const configUrl = '/api/site/global-setting'
 
-12. 依据功能划分模块，结构如下所示
+interface HouseListData {
+    total: number
+    data: House[]
+}
+
+export function* getHouseList(params: object): SagaIterator {
+    console.log('params', params)
+    try {
+        // saga里面只能使用这种方式，不能在get、post等方法传入范型约束
+        const result: HouseListData = yield call(get, houseListUrl, params)
+        yield put({
+            type: types.GET_HOUSE_LIST_SUCC,
+            houseList: result.data,
+            total: result.total
+        })
+    } catch (error) {
+        console.log('error', error)
+    }
+}
+
+export function* getGlobalConfig(params: object): SagaIterator {
+    try {
+        const result = yield call(get, configUrl, params)
+        console.log('result', result)
+        yield put({
+            type: types.GET_GLOBAL_CONFIG_SUCC,
+            globalConfig: result
+        })
+    } catch (error) {
+        console.log('error', error)
+    }
+}
+
+export default function* root(): SagaIterator {
+    yield all([
+        takeLatest(types.GET_HOUSE_LIST, getHouseList),
+        takeLatest(types.GET_GLOBAL_CONFIG, getGlobalConfig)
+    ])
+}
+
+```
+https://redux-saga.js.org/
+https://redux-saga-in-chinese.js.org/
+
+#### 十二、 引入antd-mobile作为基础组件
+
+- 使用babel-plugin-import按需加载被使用的组件
+- 使用antd-dayjs-webpack-plugin插件Day.js 替换 momentjs 优化打包大小 
+
+#### 十三、 使用jest做单元测试
+
+#### 十四、 依据功能划分目录，结构如下所示
+
+```
+    |-- .editorconfig
+    |-- .git
+    |-- .gitignore
+    |-- server
+        |-- argv.js
+        |-- index.js
+        |-- port.js
+        |-- proxy.js
+        |-- runOpen.js
+    |-- script
+        |-- webpack
+            | -- webpack.config.js
+            | -- webpack.dev.config.js
+            | -- webpack.prod.config.js
+        |-- outputDir.js
+    |-- .babelrc
+    |-- .browserslistrc
+    |-- .eslintignore
+    |-- .eslint.js
+    |-- .prettierrc
+    |-- .stylelintrc
+    |-- .index.html
+    |-- .postcss.config.js
+    |-- .tsconfig.json
+    |-- node_modules
+    |-- package.json
+    |-- src
+        |-- assets  // 
+            |-- index.less
+        |-- common  // 
+            |-- schemas
+        |-- components  // 
+            |-- footer.ts
+        |-- contaniner  //
+            |-- home
+               |-- actions //  
+               |-- constants //  
+               |-- index.module.css //  
+               |-- index.tsx //  
+               |-- loadable.tsx //  
+               |-- reducers.ts //  
+               |-- router.ts //  
+               |-- saga.ts // 
+        |-- utils  // 
+        |-- actions.ts  // 
+        |-- app.tsx  // 
+        |-- constants.tsx  // 
+        |-- global.d.ts  // 
+        |-- reducer.tsx  // 
+        |-- root.tsx  // 
+        |-- router.ts  // 
+```
 
 
+参考链接
 https://stackoverflow.com/questions/35517245/error-missing-class-properties-transform
 https://medium.com/@jrwebdev/react-render-props-in-typescript-b561b00bc67c
 https://codeburst.io/dynamic-imports-react-and-redux-29f6d2d88d77
