@@ -8,7 +8,9 @@ const webpackConfig = require('./webpack.config')
 
 module.exports = webpackConfig({
     mode: 'production',
-    entry: path.join(process.cwd(), 'src/app.tsx'),
+    entry: {
+        app: path.join(process.cwd(), 'src/app.tsx')
+    },
     output: {
         filename: '[name].[chunkhash].js',
         chunkFilename: '[name].[chunkhash].chunk.js'
@@ -81,8 +83,6 @@ module.exports = webpackConfig({
             inject: true,
             template: path.join(__dirname, '../../index.html'),
             minification: true,
-            chunks: ['runtime', 'nest-vendor', 'base-common', 'pageA'],
-            chunksSortMode: 'manual'
         })
         // new CompressionPlugin({
         //     algorithm: 'gzip',
@@ -94,5 +94,5 @@ module.exports = webpackConfig({
     performance: {
         assetFilter: (assetFilename) => !/(\.map$)|(^(main\.|favicon\.))/.test(assetFilename)
     },
-    devtool: 'cheap-module-eval-source-map'
+    devtool: 'source-map'
 })

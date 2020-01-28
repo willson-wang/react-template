@@ -23,24 +23,24 @@ const COMMON_PLUGINS = [
     })
 ]
 
-if (isProd) {
-    COMMON_PLUGINS.push(
-        new AutoDllPlugin({
-            inject: true, // will inject the DLL bundle to index.html
-            debug: false,
-            filename: '[name].js',
-            path: './dll',
-            entry: {
-                vendor: ['react', 'react-hot-loader', '@hot-loader/react-dom']
-            }
-        })
-    )
-}
+// if (isProd) {
+//     COMMON_PLUGINS.push(
+//         new AutoDllPlugin({
+//             inject: true, // will inject the DLL bundle to index.html
+//             debug: false,
+//             filename: '[name].js',
+//             path: './dll',
+//             entry: {
+//                 vendor: ['react', 'react-hot-loader', '@hot-loader/react-dom']
+//             }
+//         })
+//     )
+// }
 
 if (argv.analyzer) {
     COMMON_PLUGINS.push(
         new BundleAnalyzerPlugin({
-            analyzerPort: parseInt(argv.port || 9528, 10)
+            analyzerPort: parseInt(argv.port || 9529, 10)
         })
     )
 }
@@ -111,14 +111,19 @@ module.exports = (webpackOptions) => ({
             },
             {
                 test: /.less$/,
-                include: [resolve('src')],
-                exclude: /node_modules/,
+                // include: [resolve('src')],
+                // exclude: /node_modules/,
                 use: [
                     // Loaders are evaluated/executed from right to left (or from bottom to top)
                     styleLoader,
                     'css-loader',
                     'postcss-loader',
-                    'less-loader'
+                    {
+                        loader: 'less-loader',
+                        options: {
+                            javascriptEnabled: true
+                        }
+                    }
                 ]
             },
             {
@@ -189,7 +194,7 @@ module.exports = (webpackOptions) => ({
     },
     plugins: webpackOptions.plugins.concat(COMMON_PLUGINS),
     resolve: {
-        modules: [resolve('src'), resolve('node_modules')],
+        modules: [resolve('src'), 'node_modules'],
         extensions: ['.ts', '.tsx', '.js', '.jsx', '.react.js'],
         mainFields: ['main', 'jsnext:main'],
         alias: {

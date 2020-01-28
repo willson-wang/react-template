@@ -1,6 +1,7 @@
 import React from 'react'
 import { bindActionCreators, Dispatch } from 'redux'
 import { connect, ConnectedProps } from 'react-redux'
+import { Button } from 'antd'
 import styles from './index.module.css'
 import * as Actions from '@/actions'
 import { RootStore } from '@/constants'
@@ -36,6 +37,7 @@ function Home(props: IProps): JSX.Element {
     return (
         <div className={styles.wrap}>
             Home 000
+            <Button>antd</Button>
             <div>{props.num}</div>
             <div onClick={() => props.increase(props.num + 1)}>+</div>
             <div onClick={() => props.increase(props.num - 1)}>-</div>

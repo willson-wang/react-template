@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import Root from './root'
 import configureStore from './utils/configureStore'
+// import 'antd/dist/antd.css'
 import './assets/index.less'
 
 console.log('ReactDOM 000')
