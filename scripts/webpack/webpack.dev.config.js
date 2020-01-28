@@ -3,7 +3,7 @@ const path = require('path')
 const webpackConfig = require('./webpack.config')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CircularDependencyPlugin = require('circular-dependency-plugin')
-console.log('__dir', __dirname)
+
 module.exports = webpackConfig({
     mode: 'development',
     entry: ['webpack-hot-middleware/client?name=mobile', path.join(__dirname, '../../src/app.tsx')],
@@ -28,7 +28,7 @@ module.exports = webpackConfig({
             failOnError: false // show a warning when there is a circular dependency
         })
     ],
-    devtool: 'source-map',
+    devtool: 'cheap-module-eval-source-map',
     performance: {
         hints: false
     }

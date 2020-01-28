@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CompressionPlugin = require('compression-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const ChunkRenamePlugin = require('webpack-chunk-rename-plugin')
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const webpackConfig = require('./webpack.config')
 
 module.exports = webpackConfig({
@@ -13,10 +14,19 @@ module.exports = webpackConfig({
     },
     output: {
         filename: '[name].[chunkhash].js',
-        chunkFilename: '[name].[chunkhash].chunk.js'
+        chunkFilename: '[name].[chunkhash].chunk.js',
+        publicPath: '/'
     },
     optimization: {
         minimizer: [
+            new OptimizeCssAssetsPlugin({
+                cssProcessorOptions: {
+                    map: {
+                        inline: false,
+                        annotation: true
+                    }
+                }
+            }),
             new TerserPlugin({
                 // 6984ms 1508ms 1502ms
                 cache: true,
@@ -82,7 +92,7 @@ module.exports = webpackConfig({
         new HtmlWebpackPlugin({
             inject: true,
             template: path.join(__dirname, '../../index.html'),
-            minification: true,
+            minification: true
         })
         // new CompressionPlugin({
         //     algorithm: 'gzip',

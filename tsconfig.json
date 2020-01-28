@@ -4,7 +4,10 @@
         "paths": {
             "@/*": ["src/*"],
             "@utils/*": ["src/utils/*"],
-            "@components/*": ["src/components/*"]
+            "@components/*": ["src/components/*"],
+            "@assets/*": ["src/assets/*"],
+            "@common/*": ["src/common/*"],
+            "@contaniner/*": ["src/contaniner/*"],
         },
         "outDir": "./dist/",
         "sourceMap": true,
@@ -19,7 +22,8 @@
             "dom.iterable",
             "esnext"
         ],
-        "allowJs": true
+        "allowJs": true,
+        "experimentalDecorators": true
     },
     "include": [
         "src"
